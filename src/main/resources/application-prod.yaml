@@ -3,8 +3,12 @@ spring:
     name: qtty
     version: 0.0.1
 
+  config:
+    activate:
+      on-profile: prod
+
   datasource:
-    url: jdbc:postgresql://postgres:5432/qtty_db
+    url: jdbc:postgresql://${DB_URL}:5432/qtty_db
     username: ${QTTY_APP}
     password: ${QTTY_PASSWORD}
 

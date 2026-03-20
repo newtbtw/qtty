@@ -8,17 +8,16 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.List;
 
+public interface ISlashCommand {
 
-public abstract class SlashCommandTemplate {
+    List<OptionData> getOptions();
+    String getName();
+    String getDescription();
+    DefaultMemberPermissions getMemberPermissions();
 
-    protected abstract List<OptionData> getOptions();
-    protected abstract String getName();
-    protected abstract String getDescription();
-    protected abstract DefaultMemberPermissions getMemberPermissions();
+     void onCommand(SlashCommandInteractionEvent event);
 
-    public abstract void onCommand(SlashCommandInteractionEvent event);
-
-    public final CommandData getData(){
+     default CommandData getData(){
         return Commands.slash(getName(), getDescription()).addOptions(getOptions()).setDefaultPermissions(getMemberPermissions());
     }
 }

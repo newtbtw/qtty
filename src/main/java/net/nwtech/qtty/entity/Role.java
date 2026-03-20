@@ -5,14 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
 @Table
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Guild {
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,17 +19,15 @@ public class Guild {
     @Column(unique = true,  nullable = false)
     private Long discordId;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Role> roles;
+    @Column(unique = true,  nullable = false)
+    private String roleName;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<User> members;
+    @ManyToOne
+    @JoinColumn(name = "guild_id")
+    private Guild guild;
 
-    private Boolean allowed;
-
-    public Guild(Long discordId, List<Role> roles, Boolean allowed) {
+    public Role(Long discordId, String roleName){
         this.discordId = discordId;
-        this.roles = roles;
-        this.allowed = allowed;
+        this.roleName = roleName;
     }
 }
