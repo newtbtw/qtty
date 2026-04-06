@@ -1,18 +1,15 @@
 package net.nwtech.qtty.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
+import lombok.*;
 
 @Entity
-@Table(name = "app_user")
+@Table(name = "qtty_user")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class User {
 
     @Id
@@ -22,7 +19,10 @@ public class User {
     @Column(unique = true,  nullable = false)
     private Long discordId;
 
-    public User(Long discordId) {
+    private String username;
+
+    public User(Long discordId, String username) {
         this.discordId = discordId;
+        this.username = username;
     }
 }

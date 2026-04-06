@@ -15,14 +15,14 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class SlashCommandListener extends ListenerAdapter {
+public class SlashCommandListener extends ListenerAdapter implements IListener{
 
     private final List<ISlashCommand> commands;
     private final Logger logger =  LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        logger.info("User {} performed command {}", event.getUser().getEffectiveName(), event.getName());
+        logger.info("User {} performed command {}", event.getUser().getGlobalName(), event.getName());
         var optionalCommand = commands.stream()
                 .filter(c -> c.getName().equals(event.getName()))
                 .findFirst();

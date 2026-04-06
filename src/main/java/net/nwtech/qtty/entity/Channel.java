@@ -5,30 +5,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "dc_guild")
+@Table(name = "dc_channel")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Guild {
+public class Channel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true,  nullable = false)
+    @Column(unique = true,  nullable = false, updatable = false)
     private Long discordId;
 
-    private Boolean allowed;
     private String name;
 
-    public Guild(Long discordId, Boolean allowed, String name) {
-        this.discordId = discordId;
-        this.allowed = allowed;
-        this.name = name;
-    }
+    @Enumerated(EnumType.STRING)
+    private ChannelType type;
 
+    private enum ChannelType {
+        VOICE,
+        TEXT;
+    }
 }

@@ -1,15 +1,15 @@
 package net.nwtech.qtty.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Table
+@Table(name = "dc_role")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Role {
 
     @Id
@@ -19,15 +19,16 @@ public class Role {
     @Column(unique = true,  nullable = false)
     private Long discordId;
 
-    @Column(unique = true,  nullable = false)
+    @Column(nullable = false)
     private String roleName;
 
-    @ManyToOne
-    @JoinColumn(name = "guild_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "guild_id", nullable = false)
     private Guild guild;
 
-    public Role(Long discordId, String roleName){
+    public Role(Long discordId, String roleName, Guild guild) {
         this.discordId = discordId;
         this.roleName = roleName;
+        this.guild = guild;
     }
 }

@@ -19,27 +19,29 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class Discord {
 
-    public volatile static JDA JDA_CLIENT;
-
     private final Logger logger =  LoggerFactory.getLogger(this.getClass());
     private final List<ISlashCommand> commands;
     private final List<IListener> listeners;
-    @Value("${DISCORD_TOKEN}") private String discordToken;
+    private final JDA JDA_CLIENT;
 
     @PostConstruct
     public void init() {
-        Assert.notNull(discordToken, "Discord token is null");
-        JDA_CLIENT = JDABuilder
-                .createDefault(discordToken)
-                .build();
+        upsertListeners(listeners);
         upsertCommands(commands);
     }
 
-    public void upsertCommands(List<ISlashCommand> commands) {
+    private void upsertCommands(List<ISlashCommand> commands) {
         commands.forEach(command -> {
             JDA_CLIENT.upsertCommand(command.getData()).queue(s -> {
                 logger.info("Upserted command: {}", s.getName());
             });;
+        });
+    }
+
+    private void upsertListeners(List<IListener> listeners) {
+        listeners.forEach(listener -> {
+            JDA_CLIENT.addEventListener(listener);
+            logger.info("Added listener: {}", listener.getClass().getName());
         });
     }
 

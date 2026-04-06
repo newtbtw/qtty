@@ -11,4 +11,5 @@ public interface GuildRepository extends JpaRepository<Guild, Long> {
 
     Optional<Guild> findByDiscordId(Long discordId);
 
+    boolean existsGuildByDiscordId(long guildId);
 }

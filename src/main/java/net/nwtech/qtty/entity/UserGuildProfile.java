@@ -1,11 +1,9 @@
 package net.nwtech.qtty.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,7 +11,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder = true)
+@Builder
+@Getter
+@Setter
 public class UserGuildProfile {
 
     @Id
@@ -25,13 +25,12 @@ public class UserGuildProfile {
     private User user;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private List<Role> roles;
+    private List<Role> roles = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "guild_id", referencedColumnName = "id")
     private Guild guild;
 
-    private String guildNickName;
-
+    private String guildUserNickName;
 
 }
