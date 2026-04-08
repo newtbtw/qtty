@@ -1,14 +1,14 @@
 package net.nwtech.qtty.application.port.out;
 
-import net.nwtech.qtty.domain.model.Role;
+import net.nwtech.qtty.domain.model.RoleModel;
 
 import java.util.Optional;
 
 public interface RoleRepositoryPort {
 
-    Optional<Role> findByDiscordId(long discordId);
+    Optional<RoleModel> findByDiscordId(long discordId);
 
-    Role save(Role role);
+    RoleModel save(RoleModel roleModel);
 
     void deleteByDiscordId(long discordId);
 }

@@ -2,7 +2,7 @@ package net.nwtech.qtty.application.usecase;
 
 import lombok.RequiredArgsConstructor;
 import net.nwtech.qtty.application.port.out.RoleRepositoryPort;
-import net.nwtech.qtty.domain.model.Role;
+import net.nwtech.qtty.domain.model.RoleModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,12 +14,12 @@ public class SyncRoleCreatedUseCase {
     private final RoleRepositoryPort roleRepository;
 
     @Transactional
-    public Role execute(long guildDiscordId, long roleDiscordId, String roleName) {
+    public RoleModel execute(long guildDiscordId, long roleDiscordId, String roleName) {
         var guild = ensureGuildUseCase.execute(guildDiscordId);
         var existingRole = roleRepository.findByDiscordId(roleDiscordId);
 
-        return roleRepository.save(new Role(
-                existingRole.map(Role::id).orElse(null),
+        return roleRepository.save(new RoleModel(
+                existingRole.map(RoleModel::id).orElse(null),
                 roleDiscordId,
                 roleName,
                 guild.id()

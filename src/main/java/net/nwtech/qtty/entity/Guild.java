@@ -25,6 +25,10 @@ public class Guild {
     private Boolean allowed;
     private String name;
 
+    private Long auditChannelId;
+
+    private Long moviesChannelId;
+
     public Guild(Long discordId, Boolean allowed, String name) {
         this.discordId = discordId;
         this.allowed = allowed;

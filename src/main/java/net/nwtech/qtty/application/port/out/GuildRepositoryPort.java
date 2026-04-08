@@ -1,14 +1,14 @@
 package net.nwtech.qtty.application.port.out;
 
-import net.nwtech.qtty.domain.model.Guild;
+import net.nwtech.qtty.domain.model.GuildModel;
 
 import java.util.Optional;
 
 public interface GuildRepositoryPort {
 
-    Optional<Guild> findByDiscordId(long discordId);
+    Optional<GuildModel> findByDiscordId(long discordId);
 
     boolean existsByDiscordId(long discordId);
 
-    Guild save(Guild guild);
+    GuildModel save(GuildModel guildModel);
 }

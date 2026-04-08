@@ -1,12 +1,12 @@
 package net.nwtech.qtty.application.port.out;
 
-import net.nwtech.qtty.domain.model.User;
+import net.nwtech.qtty.domain.model.UserModel;
 
 import java.util.Optional;
 
 public interface UserRepositoryPort {
 
-    Optional<User> findByDiscordId(long discordId);
+    Optional<UserModel> findByDiscordId(long discordId);
 
-    User save(User user);
+    UserModel save(UserModel userModel);
 }

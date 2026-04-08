@@ -17,6 +17,6 @@ public interface DiscordGateway {
     record DiscordRole(long discordId, String name, long guildDiscordId) {
     }
 
-    record DiscordMember(long discordId, String username, String nickname, List<DiscordRole> roles) {
+    record  DiscordMember(long discordId, String username, String nickname, List<DiscordRole> roles) {
     }
 }

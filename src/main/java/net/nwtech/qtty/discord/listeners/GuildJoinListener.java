@@ -19,6 +19,6 @@ public class GuildJoinListener extends ListenerAdapter implements IListener {
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
         ensureGuildUseCase.execute(event.getGuild().getIdLong());
-        logger.info("Joined on guild {} ({})", event.getGuild().getName(), event.getGuild().getIdLong());
+        logger.info("Joined on guildModel {} ({})", event.getGuild().getName(), event.getGuild().getIdLong());
     }
 }

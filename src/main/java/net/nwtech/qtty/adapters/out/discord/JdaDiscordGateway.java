@@ -26,7 +26,6 @@ public class JdaDiscordGateway implements DiscordGateway {
         if (guild == null) {
             return List.of();
         }
-
         return guild.getMembers().stream()
                 .map(member -> new DiscordMember(
                         member.getIdLong(),
@@ -49,7 +48,7 @@ public class JdaDiscordGateway implements DiscordGateway {
         return Optional.ofNullable(guild.getMemberById(userId))
                 .map(member -> new DiscordMember(
                         member.getIdLong(),
-                        member.getUser().getGlobalName() != null ? member.getUser().getGlobalName() : member.getUser().getName(),
+                        member.getUser().getName(),
                         member.getNickname(),
                         member.getRoles().stream()
                                 .map(role -> new DiscordRole(role.getIdLong(), role.getName(), guildId))

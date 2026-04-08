@@ -22,7 +22,7 @@ public class SlashCommandListener extends ListenerAdapter implements IListener{
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        logger.info("User {} performed command {}", event.getUser().getGlobalName(), event.getName());
+        logger.info("UserModel {} performed command {}", event.getUser().getGlobalName(), event.getName());
         var optionalCommand = commands.stream()
                 .filter(c -> c.getName().equals(event.getName()))
                 .findFirst();

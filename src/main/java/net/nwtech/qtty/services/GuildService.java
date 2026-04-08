@@ -21,10 +21,10 @@ public class GuildService {
     private final Logger logger =  LoggerFactory.getLogger(this.getClass());
 
     public Guild createGuild(@NotNull long guildDiscordId) {
-        logger.info("Creating guild with id {}", guildDiscordId);
+        logger.info("Creating guildModel with id {}", guildDiscordId);
         var discordGuild = discordService.getGuild(guildDiscordId);
         if (discordGuild.isEmpty()) {
-            throw new IllegalArgumentException("Guild not found");
+            throw new IllegalArgumentException("GuildModel not found");
         }
         var name = discordGuild.get().getName();
         var allowed = false;

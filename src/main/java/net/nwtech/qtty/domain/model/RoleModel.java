@@ -1,6 +1,6 @@
 package net.nwtech.qtty.domain.model;
 
-public record Role(
+public record RoleModel(
         Long id,
         long discordId,
         String roleName,

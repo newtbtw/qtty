@@ -2,7 +2,7 @@ package net.nwtech.qtty.adapters.out.persistence;
 
 import lombok.RequiredArgsConstructor;
 import net.nwtech.qtty.application.port.out.RoleRepositoryPort;
-import net.nwtech.qtty.domain.model.Role;
+import net.nwtech.qtty.domain.model.RoleModel;
 import net.nwtech.qtty.repositories.GuildRepository;
 import net.nwtech.qtty.repositories.RoleRepository;
 import org.springframework.stereotype.Component;
@@ -17,21 +17,21 @@ public class RolePersistenceAdapter implements RoleRepositoryPort {
     private final GuildRepository guildRepository;
 
     @Override
-    public Optional<Role> findByDiscordId(long discordId) {
+    public Optional<RoleModel> findByDiscordId(long discordId) {
         return roleRepository.findByDiscordId(discordId).map(this::toDomain);
     }
 
     @Override
-    public Role save(Role role) {
-        net.nwtech.qtty.entity.Role entity = role.id() != null
-                ? roleRepository.findById(role.id()).orElse(new net.nwtech.qtty.entity.Role())
+    public RoleModel save(RoleModel roleModel) {
+        net.nwtech.qtty.entity.Role entity = roleModel.id() != null
+                ? roleRepository.findById(roleModel.id()).orElse(new net.nwtech.qtty.entity.Role())
                 : new net.nwtech.qtty.entity.Role();
 
-        var guild = guildRepository.findById(role.guildId())
-                .orElseThrow(() -> new IllegalArgumentException("Guild not found for role: " + role.guildId()));
+        var guild = guildRepository.findById(roleModel.guildId())
+                .orElseThrow(() -> new IllegalArgumentException("GuildModel not found for roleModel: " + roleModel.guildId()));
 
-        entity.setDiscordId(role.discordId());
-        entity.setRoleName(role.roleName());
+        entity.setDiscordId(roleModel.discordId());
+        entity.setRoleName(roleModel.roleName());
         entity.setGuild(guild);
 
         return toDomain(roleRepository.save(entity));
@@ -42,8 +42,8 @@ public class RolePersistenceAdapter implements RoleRepositoryPort {
         roleRepository.deleteByDiscordId(discordId);
     }
 
-    private Role toDomain(net.nwtech.qtty.entity.Role entity) {
-        return new Role(
+    private RoleModel toDomain(net.nwtech.qtty.entity.Role entity) {
+        return new RoleModel(
                 entity.getId(),
                 entity.getDiscordId(),
                 entity.getRoleName(),

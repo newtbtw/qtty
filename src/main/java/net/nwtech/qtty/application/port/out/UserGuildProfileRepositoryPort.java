@@ -1,8 +1,8 @@
 package net.nwtech.qtty.application.port.out;
 
-import net.nwtech.qtty.domain.model.UserGuildProfile;
+import net.nwtech.qtty.domain.model.UserGuildProfileModel;
 
 public interface UserGuildProfileRepositoryPort {
 
-    UserGuildProfile save(UserGuildProfile profile);
+    UserGuildProfileModel save(UserGuildProfileModel profile);
 }

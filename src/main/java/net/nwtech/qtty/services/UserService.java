@@ -37,7 +37,7 @@ public class UserService {
     }
 
     public void addToGuild(List<Long> usersId, Guild guild) {
-        logger.info("Adding {} users to guild: {} [{}]", usersId.size(), guild.getName(), guild.getDiscordId());
+        logger.info("Adding {} users to guildModel: {} [{}]", usersId.size(), guild.getName(), guild.getDiscordId());
         int created = 0;
         int addedToGuild = 0;
         int notFound = 0;
@@ -56,7 +56,7 @@ public class UserService {
                 profileRepository.save(profile);
             }
         }
-        logger.info("{} users created in db. {} users not found. {} users added to guild. {} profiles created.", created, notFound, addedToGuild, profilesCreated);
+        logger.info("{} users created in db. {} users not found. {} users added to guildModel. {} profiles created.", created, notFound, addedToGuild, profilesCreated);
     }
 
     private UserGuildProfile createProfileFromUser(Guild guild, User user) {

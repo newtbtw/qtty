@@ -31,7 +31,7 @@ public class InitCommand implements ISlashCommand {
 
     @Override
     public String getDescription() {
-        return "Create a initial setup for this guild in the bot's app.";
+        return "Create a initial setup for this guildModel in the bot's app.";
     }
 
     @Override
@@ -43,20 +43,20 @@ public class InitCommand implements ISlashCommand {
     public void onCommand(SlashCommandInteractionEvent event) {
         var eventGuild = event.getGuild();
         if (eventGuild == null) {
-            event.reply("You are sending this command outside a guild!").setEphemeral(true).queue();
-            logger.info("Command sent outside a guild!");
+            event.reply("You are sending this command outside a guildModel!").setEphemeral(true).queue();
+            logger.info("Command sent outside a guildModel!");
             return;
         }
 
         var result = initializeGuildUseCase.execute(eventGuild.getIdLong());
-        logger.info("Guild {} initialized. members={}, usersCreated={}, rolesCreated={}, profilesUpserted={}",
-                result.guild().discordId(),
+        logger.info("GuildModel {} initialized. members={}, usersCreated={}, rolesCreated={}, profilesUpserted={}",
+                result.guildModel().discordId(),
                 result.membersProcessed(),
                 result.usersCreated(),
                 result.rolesCreated(),
                 result.profilesUpserted());
 
-        event.reply("Guild initialized successfully. Members: %d, new users: %d, new roles: %d, profiles synced: %d"
+        event.reply("GuildModel initialized successfully. Members: %d, new users: %d, new roleModels: %d, profiles synced: %d"
                         .formatted(
                                 result.membersProcessed(),
                                 result.usersCreated(),

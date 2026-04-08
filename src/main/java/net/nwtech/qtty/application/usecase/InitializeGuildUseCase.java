@@ -5,10 +5,7 @@ import net.nwtech.qtty.application.port.out.DiscordGateway;
 import net.nwtech.qtty.application.port.out.RoleRepositoryPort;
 import net.nwtech.qtty.application.port.out.UserGuildProfileRepositoryPort;
 import net.nwtech.qtty.application.port.out.UserRepositoryPort;
-import net.nwtech.qtty.domain.model.Guild;
-import net.nwtech.qtty.domain.model.Role;
-import net.nwtech.qtty.domain.model.User;
-import net.nwtech.qtty.domain.model.UserGuildProfile;
+import net.nwtech.qtty.domain.model.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +24,7 @@ public class InitializeGuildUseCase {
 
     @Transactional
     public InitializationResult execute(long guildDiscordId) {
-        Guild guild = ensureGuildUseCase.execute(guildDiscordId);
+        GuildModel guildModel = ensureGuildUseCase.execute(guildDiscordId);
         List<DiscordGateway.DiscordMember> members = discordGateway.getGuildMembers(guildDiscordId);
 
         int usersCreated = 0;
@@ -36,47 +33,47 @@ public class InitializeGuildUseCase {
 
         for (DiscordGateway.DiscordMember member : members) {
             var existingUser = userRepository.findByDiscordId(member.discordId());
-            User user;
+            UserModel userModel;
             if (existingUser.isPresent()) {
-                user = existingUser.get();
+                userModel = existingUser.get();
             } else {
-                user = userRepository.save(new User(null, member.discordId(), member.username()));
+                userModel = userRepository.save(new UserModel(null, member.discordId(), member.username()));
                 usersCreated++;
             }
 
-            List<Role> mappedRoles = new ArrayList<>();
+            List<RoleModel> mappedRoleModels = new ArrayList<>();
             for (DiscordGateway.DiscordRole discordRole : member.roles()) {
                 var existingRole = roleRepository.findByDiscordId(discordRole.discordId());
-                Role role;
+                RoleModel roleModel;
                 if (existingRole.isPresent()) {
-                    role = existingRole.get();
+                    roleModel = existingRole.get();
                 } else {
-                    role = roleRepository.save(new Role(
+                    roleModel = roleRepository.save(new RoleModel(
                             null,
                             discordRole.discordId(),
                             discordRole.name(),
-                            guild.id()
+                            guildModel.id()
                     ));
                     rolesCreated++;
                 }
-                mappedRoles.add(role);
+                mappedRoleModels.add(roleModel);
             }
 
-            userGuildProfileRepository.save(new UserGuildProfile(
+            userGuildProfileRepository.save(new UserGuildProfileModel(
                     null,
-                    user.id(),
-                    guild.id(),
+                    userModel.id(),
+                    guildModel.id(),
                     member.nickname(),
-                    mappedRoles
+                    mappedRoleModels
             ));
             profilesUpserted++;
         }
 
-        return new InitializationResult(guild, members.size(), usersCreated, rolesCreated, profilesUpserted);
+        return new InitializationResult(guildModel, members.size(), usersCreated, rolesCreated, profilesUpserted);
     }
 
     public record InitializationResult(
-            Guild guild,
+            GuildModel guildModel,
             int membersProcessed,
             int usersCreated,
             int rolesCreated,

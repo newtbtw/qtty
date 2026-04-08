@@ -26,12 +26,12 @@ public class RoleChangeListener extends ListenerAdapter implements IListener {
                 event.getRole().getIdLong(),
                 event.getRole().getName()
         );
-        logger.info("Role {} synced from guild {}.", event.getRole().getName(), event.getGuild().getIdLong());
+        logger.info("RoleModel {} synced from guildModel {}.", event.getRole().getName(), event.getGuild().getIdLong());
     }
 
     @Override
     public void onRoleDelete(@NotNull RoleDeleteEvent event) {
         deleteRoleUseCase.execute(event.getRole().getIdLong());
-        logger.info("Role {} has been deleted from db.", event.getRole().getName());
+        logger.info("RoleModel {} has been deleted from db.", event.getRole().getName());
     }
 }
