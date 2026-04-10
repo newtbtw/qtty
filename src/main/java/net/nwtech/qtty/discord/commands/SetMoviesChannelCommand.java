@@ -1,27 +1,22 @@
 package net.nwtech.qtty.discord.commands;
 
-
 import lombok.RequiredArgsConstructor;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.nwtech.qtty.application.usecase.UpdateGuildAuditChannelCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.nwtech.qtty.application.usecase.UpdateGuildMoviesChannelCase;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AuditChannelCommand implements ISlashCommand {
+public class SetMoviesChannelCommand implements ISlashCommand{
 
-    private final UpdateGuildAuditChannelCase updateGuildAuditChannelCase;
     private final String CHANNEL_OPTION_NAME = "text-channel";
-    private static final Logger logger = LoggerFactory.getLogger(AuditChannelCommand.class);
+    private final UpdateGuildMoviesChannelCase updateGuildMoviesChannelCase;
 
     @Override
     public List<OptionData> getOptions() {
@@ -30,17 +25,17 @@ public class AuditChannelCommand implements ISlashCommand {
 
     @Override
     public String getName() {
-        return "audit-channel";
+        return "set-movies-channel";
     }
 
     @Override
     public String getDescription() {
-        return "Sets the channel assigned for audit logs.";
+        return "Sets the channel assigned for movies ratings.";
     }
 
     @Override
     public DefaultMemberPermissions getMemberPermissions() {
-        return DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR);
+        return DefaultMemberPermissions.ENABLED;
     }
 
     @Override
@@ -62,6 +57,7 @@ public class AuditChannelCommand implements ISlashCommand {
             event.reply("You must select a valid voice channel.").setEphemeral(true).queue();
             return;
         }
-        updateGuildAuditChannelCase.execute(guildId, channel.getIdLong());
+        updateGuildMoviesChannelCase.execute(guildId, channel.getIdLong());
+        event.reply("Movies channel updated to " + channel.getName()).setEphemeral(true).queue();
     }
 }

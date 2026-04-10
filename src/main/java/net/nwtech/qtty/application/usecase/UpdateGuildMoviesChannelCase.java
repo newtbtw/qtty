@@ -7,21 +7,21 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UpdateGuildAuditChannelCase {
+public class UpdateGuildMoviesChannelCase {
 
     private final GuildRepositoryPort guildRepository;
-    private final EnsureGuildUseCase ensureGuildUseCase;
+    private final EnsureGuildUseCase ensureGuildCase;
 
     public void execute(long guildId, long channelId) {
-        GuildModel guildModel = ensureGuildUseCase.execute(guildId);
+        GuildModel guildModel = ensureGuildCase.execute(guildId);
 
         var updated = GuildModel.builder()
                 .id(guildId)
                 .discordId(guildModel.discordId())
                 .allowed(guildModel.allowed())
                 .name(guildModel.name())
-                .auditChannelId(channelId)
-                .moviesChannelId(guildModel.moviesChannelId())
+                .auditChannelId(guildModel.auditChannelId())
+                .moviesChannelId(channelId)
                 .build();
         guildRepository.save(updated);
     }

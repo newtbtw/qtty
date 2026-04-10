@@ -29,6 +29,6 @@ public class SlashCommandListener extends ListenerAdapter implements IListener{
         if (optionalCommand.isPresent())
             optionalCommand.get().onCommand(event);
         else
-            event.reply("No command found").queue();
+            event.reply("Command %s not found".formatted(event.getName())).setEphemeral(true).queue();
     }
 }

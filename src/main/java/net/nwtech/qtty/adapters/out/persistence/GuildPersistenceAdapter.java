@@ -3,6 +3,7 @@ package net.nwtech.qtty.adapters.out.persistence;
 import lombok.RequiredArgsConstructor;
 import net.nwtech.qtty.application.port.out.GuildRepositoryPort;
 import net.nwtech.qtty.domain.model.GuildModel;
+import net.nwtech.qtty.entity.Guild;
 import net.nwtech.qtty.repositories.GuildRepository;
 import org.springframework.stereotype.Component;
 
@@ -26,18 +27,56 @@ public class GuildPersistenceAdapter implements GuildRepositoryPort {
 
     @Override
     public GuildModel save(GuildModel guildModel) {
-        net.nwtech.qtty.entity.Guild entity = guildModel.id() != null
-                ? guildRepository.findById(guildModel.id()).orElse(new net.nwtech.qtty.entity.Guild())
-                : new net.nwtech.qtty.entity.Guild();
+        Guild entity;
 
-        entity.setDiscordId(guildModel.discordId());
-        entity.setAllowed(guildModel.allowed());
-        entity.setName(guildModel.name());
+        if (existsByDiscordId(guildModel.discordId())) {
+            // Guild already exists in database, fetch fresh and update
+            Optional<Guild> existing = guildRepository.findByDiscordId(guildModel.discordId());
+            if (existing.isPresent()) {
+                Guild updated = existing.get();
+                updated.setDiscordId(guildModel.discordId());
+                updated.setAllowed(guildModel.allowed());
+                updated.setName(guildModel.name());
+                if (guildModel.auditChannelId() != null) {
+                    updated.setAuditChannelId(guildModel.auditChannelId());
+                }
+                if (guildModel.moviesChannelId() != null) {
+                    updated.setMoviesChannelId(guildModel.moviesChannelId());
+                }
+                entity = updated;
+            } else {
+                // Guild was marked as existing but not found - create new
+                entity = new Guild(
+                        guildModel.discordId(),
+                        guildModel.allowed(),
+                        guildModel.name()
+                );
+                if (guildModel.auditChannelId() != null) {
+                    entity.setAuditChannelId(guildModel.auditChannelId());
+                }
+                if (guildModel.moviesChannelId() != null) {
+                    entity.setMoviesChannelId(guildModel.moviesChannelId());
+                }
+            }
+        } else {
+            // New guild, create fresh instance
+            entity = new Guild(
+                    guildModel.discordId(),
+                    guildModel.allowed(),
+                    guildModel.name()
+            );
+            if (guildModel.auditChannelId() != null) {
+                entity.setAuditChannelId(guildModel.auditChannelId());
+            }
+            if (guildModel.moviesChannelId() != null) {
+                entity.setMoviesChannelId(guildModel.moviesChannelId());
+            }
+        }
 
         return toDomain(guildRepository.save(entity));
     }
 
-    private GuildModel toDomain(net.nwtech.qtty.entity.Guild entity) {
+    private GuildModel toDomain(Guild entity) {
         return new GuildModel(
                 entity.getId(),
                 entity.getDiscordId(),
@@ -47,4 +86,5 @@ public class GuildPersistenceAdapter implements GuildRepositoryPort {
                 entity.getMoviesChannelId()
         );
     }
+
 }
