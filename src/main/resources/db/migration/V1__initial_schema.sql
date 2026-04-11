@@ -382,73 +382,73 @@ ALTER TABLE ONLY public.user_guild_profile
 
 
 --
--- Name: rating_record fk3aj53yffqccnhlkqforc4eufp; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
+-- Name: rating_record_movie_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
 --
 
 ALTER TABLE ONLY public.rating_record
-    ADD CONSTRAINT fk3aj53yffqccnhlkqforc4eufp FOREIGN KEY (movie_id) REFERENCES public.movie(id);
+    ADD CONSTRAINT rating_record_movie_id_fk FOREIGN KEY (movie_id) REFERENCES public.movie(id);
 
 
 --
--- Name: movie_ratings fk5j60i2nteicsrt2o3f1bu0c14; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
+-- Name: movie_ratings_rating_record_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
 --
 
 ALTER TABLE ONLY public.movie_ratings
-    ADD CONSTRAINT fk5j60i2nteicsrt2o3f1bu0c14 FOREIGN KEY (ratings_id) REFERENCES public.rating_record(id);
+    ADD CONSTRAINT movie_ratings_rating_record_id_fk FOREIGN KEY (ratings_id) REFERENCES public.rating_record(id);
 
 
 --
--- Name: user_guild_profile_roles fk8oa6ulpnxvanin7kk9523pfd9; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
+-- Name: user_guild_profile_roles_role_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
 --
 
 ALTER TABLE ONLY public.user_guild_profile_roles
-    ADD CONSTRAINT fk8oa6ulpnxvanin7kk9523pfd9 FOREIGN KEY (roles_id) REFERENCES public.dc_role(id);
+    ADD CONSTRAINT user_guild_profile_roles_role_id_fk FOREIGN KEY (roles_id) REFERENCES public.dc_role(id);
 
 
 --
--- Name: user_guild_profile fka49pnkty08gti7bmkn875iiqh; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
---
-
-ALTER TABLE ONLY public.user_guild_profile
-    ADD CONSTRAINT fka49pnkty08gti7bmkn875iiqh FOREIGN KEY (guild_id) REFERENCES public.dc_guild(id);
-
-
---
--- Name: user_guild_profile fkaym7lp5r6bqcxc2ff8j3r6tik; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
+-- Name: user_guild_profile_guild_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
 --
 
 ALTER TABLE ONLY public.user_guild_profile
-    ADD CONSTRAINT fkaym7lp5r6bqcxc2ff8j3r6tik FOREIGN KEY (user_id) REFERENCES public.qtty_user(id);
+    ADD CONSTRAINT user_guild_profile_guild_id_fk FOREIGN KEY (guild_id) REFERENCES public.dc_guild(id);
 
 
 --
--- Name: dc_role fkd30cy8heqjui9u02ocr42ti8n; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
+-- Name: user_guild_profile_user_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
+--
+
+ALTER TABLE ONLY public.user_guild_profile
+    ADD CONSTRAINT user_guild_profile_user_id_fk FOREIGN KEY (user_id) REFERENCES public.qtty_user(id);
+
+
+--
+-- Name: dc_role_guild_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
 --
 
 ALTER TABLE ONLY public.dc_role
-    ADD CONSTRAINT fkd30cy8heqjui9u02ocr42ti8n FOREIGN KEY (guild_id) REFERENCES public.dc_guild(id);
+    ADD CONSTRAINT dc_role_guild_id_fk FOREIGN KEY (guild_id) REFERENCES public.dc_guild(id);
 
 
 --
--- Name: user_guild_profile_roles fkghju2p4uci2utish3i6b5ka85; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
+-- Name: user_guild_profile_roles_user_guild_profile_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
 --
 
 ALTER TABLE ONLY public.user_guild_profile_roles
-    ADD CONSTRAINT fkghju2p4uci2utish3i6b5ka85 FOREIGN KEY (user_guild_profile_id) REFERENCES public.user_guild_profile(id);
+    ADD CONSTRAINT user_guild_profile_roles_user_guild_profile_id_fk FOREIGN KEY (user_guild_profile_id) REFERENCES public.user_guild_profile(id);
 
 
 --
--- Name: movie_ratings fkky2b7201ypwxqp3p67int4gkc; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
+-- Name: movie_ratings_movie_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
 --
 
 ALTER TABLE ONLY public.movie_ratings
-    ADD CONSTRAINT fkky2b7201ypwxqp3p67int4gkc FOREIGN KEY (movie_id) REFERENCES public.movie(id);
+    ADD CONSTRAINT movie_ratings_movie_id_fk FOREIGN KEY (movie_id) REFERENCES public.movie(id);
 
 
 --
--- Name: rating_record fktr812i1i76p0hay2gwchyh61; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
+-- Name: rating_record_user_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: qtty_app
 --
 
 ALTER TABLE ONLY public.rating_record
-    ADD CONSTRAINT fktr812i1i76p0hay2gwchyh61 FOREIGN KEY (user_id) REFERENCES public.qtty_user(id);
+    ADD CONSTRAINT rating_record_user_id_fk FOREIGN KEY (user_id) REFERENCES public.qtty_user(id);
 
