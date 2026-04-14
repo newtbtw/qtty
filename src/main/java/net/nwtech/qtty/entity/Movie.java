@@ -15,7 +15,7 @@ public class Movie {
     private Long id;
     @Column(unique = true)
     private Long discordRatingMessageId;
-    private String name;
+    private String title;
     @OneToMany(cascade = CascadeType.ALL)
     private List<RatingRecord> ratings;
 
