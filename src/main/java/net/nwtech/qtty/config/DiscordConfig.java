@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,7 @@ public class DiscordConfig {
                 .setAutoReconnect(true)
                 .setEnabledIntents(List.of(
                         GatewayIntent.AUTO_MODERATION_CONFIGURATION,
+                        GatewayIntent.GUILD_MODERATION,
                         GatewayIntent.GUILD_EXPRESSIONS,
                         GatewayIntent.GUILD_MESSAGES,
                         GatewayIntent.GUILD_PRESENCES,
@@ -33,6 +35,16 @@ public class DiscordConfig {
                         GatewayIntent.SCHEDULED_EVENTS
                         ))
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
+                .enableCache(
+                        CacheFlag.ACTIVITY,
+                        CacheFlag.CLIENT_STATUS,
+                        CacheFlag.EMOJI,
+                        CacheFlag.STICKER,
+                        CacheFlag.ONLINE_STATUS,
+                        CacheFlag.MEMBER_OVERRIDES,
+                        CacheFlag.ROLE_TAGS,
+                        CacheFlag.SCHEDULED_EVENTS
+                )
                 .build();
     }
 }
