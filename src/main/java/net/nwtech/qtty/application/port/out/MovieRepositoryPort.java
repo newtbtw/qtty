@@ -9,11 +9,15 @@ import java.util.Optional;
 
 public interface MovieRepositoryPort {
 
-    Optional<Movie> findById(long id);
+    Optional<MovieModel> findById(long id);
 
-    Optional<Movie> findByTitle(String title);
+    Optional<MovieModel> findByTmdbId(long tmdbId);
 
-    Movie save(MovieModel movie);
+    Optional<MovieModel> findByTitle(String title);
 
-    Movie updateRating(MovieModel movie, List<RatingRecordModel> ratingRecords);
+    MovieModel save(MovieModel movie);
+
+    MovieModel updateRating(MovieModel movie, List<RatingRecordModel> ratingRecords);
+
+    List<MovieModel> saveAll(List<MovieModel> movies);
 }

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"movie_id", "user_id"}))
 @Data
 public class RatingRecord {
 
@@ -14,7 +14,9 @@ public class RatingRecord {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
     private Double rating;
-    @ManyToOne(cascade = CascadeType.ALL)
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "movie_id")
     private Movie movie;
 
 }

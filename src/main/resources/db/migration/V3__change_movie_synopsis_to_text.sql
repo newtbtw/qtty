@@ -1,0 +1,2 @@
+ALTER TABLE movie
+    ALTER COLUMN synopsis TYPE TEXT;

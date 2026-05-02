@@ -1,0 +1,1 @@
+-- No-op: movie schema is defined directly in V1__initial_schema.sql.
