@@ -9,6 +9,7 @@ public record GuildModel(
         boolean allowed,
         String name,
         Long auditChannelId,
-        Long moviesChannelId
+        Long moviesChannelId,
+        Long welcomeChannelId
 ) {
 }

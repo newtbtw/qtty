@@ -22,6 +22,7 @@ public class UpdateGuildMoviesChannelCase {
                 .name(guildModel.name())
                 .auditChannelId(guildModel.auditChannelId())
                 .moviesChannelId(channelId)
+                .welcomeChannelId(guildModel.welcomeChannelId())
                 .build();
         guildRepository.save(updated);
     }

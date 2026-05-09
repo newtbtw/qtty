@@ -28,6 +28,7 @@ public class EnsureGuildUseCase {
                 false,
                 discordGuild.name(),
                 null,
+                null,
                 null
         ));
     }

@@ -43,6 +43,9 @@ public class GuildPersistenceAdapter implements GuildRepositoryPort {
                 if (guildModel.moviesChannelId() != null) {
                     updated.setMoviesChannelId(guildModel.moviesChannelId());
                 }
+                if (guildModel.welcomeChannelId() != null) {
+                    updated.setWelcomeChannelId(guildModel.welcomeChannelId());
+                }
                 entity = updated;
             } else {
                 // Guild was marked as existing but not found - create new
@@ -56,6 +59,9 @@ public class GuildPersistenceAdapter implements GuildRepositoryPort {
                 }
                 if (guildModel.moviesChannelId() != null) {
                     entity.setMoviesChannelId(guildModel.moviesChannelId());
+                }
+                if (guildModel.welcomeChannelId() != null) {
+                    entity.setWelcomeChannelId(guildModel.welcomeChannelId());
                 }
             }
         } else {
@@ -71,6 +77,9 @@ public class GuildPersistenceAdapter implements GuildRepositoryPort {
             if (guildModel.moviesChannelId() != null) {
                 entity.setMoviesChannelId(guildModel.moviesChannelId());
             }
+            if (guildModel.welcomeChannelId() != null) {
+                entity.setWelcomeChannelId(guildModel.welcomeChannelId());
+            }
         }
 
         return toDomain(guildRepository.save(entity));
@@ -83,7 +92,8 @@ public class GuildPersistenceAdapter implements GuildRepositoryPort {
                 Boolean.TRUE.equals(entity.getAllowed()),
                 entity.getName(),
                 entity.getAuditChannelId(),
-                entity.getMoviesChannelId()
+                entity.getMoviesChannelId(),
+                entity.getWelcomeChannelId()
         );
     }
 
