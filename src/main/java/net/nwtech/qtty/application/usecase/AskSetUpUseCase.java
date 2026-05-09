@@ -1,6 +1,5 @@
 package net.nwtech.qtty.application.usecase;
 
-import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.components.MessageTopLevelComponent;
 import net.dv8tion.jda.api.components.container.Container;
 import net.dv8tion.jda.api.components.separator.Separator;
@@ -8,34 +7,39 @@ import net.dv8tion.jda.api.components.textdisplay.TextDisplay;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
-import net.nwtech.qtty.application.port.out.DiscordGateway;
-import net.nwtech.qtty.application.port.out.GuildRepositoryPort;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
-@RequiredArgsConstructor
 public class AskSetUpUseCase {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(AskSetUpUseCase.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AskSetUpUseCase.class);
 
     public void execute(@NotNull GuildJoinEvent event) {
         var guild = event.getGuild();
-        TextChannel channel = null;
-        if (guild.getSystemChannel() != null)
-            channel = guild.getSystemChannel();
-        else
-            if (guild.getDefaultChannel() != null)
-                channel = guild.getDefaultChannel().asTextChannel();
+        var channel = resolveSetupChannel(guild);
 
-        if (channel == null) {
+        if (channel.isEmpty()) {
             LOGGER.warn("Guild {}[{}] has no System or Default Channel", event.getGuild().getName(), guild.getId());
             sendMessageToOwner(guild);
             return;
         }
-        channel.sendMessageComponents(buildSetupMessageWarn(guild)).useComponentsV2().queue();
+
+        channel.get()
+                .sendMessageComponents(buildSetupMessageWarn(guild))
+                .useComponentsV2()
+                .queue(
+                        ignored -> LOGGER.info("Setup message sent to guild {}[{}]", guild.getName(), guild.getId()),
+                        error -> {
+                            LOGGER.warn("Failed to send setup message to guild {}[{}] channel {}. Falling back to owner DM.",
+                                    guild.getName(), guild.getId(), channel.get().getId(), error);
+                            sendMessageToOwner(guild);
+                        }
+                );
     }
 
     private void sendMessageToOwner(Guild guild) {
@@ -44,9 +48,32 @@ public class AskSetUpUseCase {
             LOGGER.warn("Guild {}[{}] has no Owner", guild.getName(), guild.getId());
             return;
         }
-        owner.getUser().openPrivateChannel().queue(channel -> {
-            channel.sendMessageComponents(buildSetupMessageWarn(guild)).useComponentsV2().queue();
-        });
+
+        owner.getUser().openPrivateChannel().queue(
+                channel -> channel.sendMessageComponents(buildSetupMessageWarn(guild))
+                        .useComponentsV2()
+                        .queue(
+                                ignored -> LOGGER.info("Setup message sent to owner of guild {}[{}]", guild.getName(), guild.getId()),
+                                error -> LOGGER.warn("Failed to send setup message to owner of guild {}[{}]",
+                                        guild.getName(), guild.getId(), error)
+                        ),
+                error -> LOGGER.warn("Failed to open private channel with owner of guild {}[{}]",
+                        guild.getName(), guild.getId(), error)
+        );
+    }
+
+    private Optional<TextChannel> resolveSetupChannel(Guild guild) {
+        var systemChannel = guild.getSystemChannel();
+        if (systemChannel != null && systemChannel.canTalk()) {
+            return Optional.of(systemChannel);
+        }
+
+        var defaultChannel = guild.getDefaultChannel();
+        if (defaultChannel instanceof TextChannel textChannel && textChannel.canTalk()) {
+            return Optional.of(textChannel);
+        }
+
+        return Optional.empty();
     }
 
     private MessageTopLevelComponent buildSetupMessageWarn(Guild guild) {
